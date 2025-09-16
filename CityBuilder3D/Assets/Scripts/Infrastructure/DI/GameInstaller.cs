@@ -28,7 +28,6 @@ public sealed class GameInstaller : LifetimeScope
   {
     builder.RegisterMessagePipe();
 
-    builder.Register<IEventBus, EventBus>(Lifetime.Singleton);
     builder.Register<ISaveLoadService, SaveLoadService>(Lifetime.Singleton);
     builder.Register<IEconomyService, EconomyService>(Lifetime.Singleton);
     builder.Register<IBuildingRepository, BuildingRepository>(Lifetime.Singleton);

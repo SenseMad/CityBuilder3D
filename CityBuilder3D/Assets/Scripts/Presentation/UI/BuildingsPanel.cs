@@ -90,7 +90,7 @@ namespace Scripts.Presentation.UI
           if (view != null)
           {
             _selectedBuildingId = view.BuildingId;
-            _statusLabel.text = $"Выбранно здание {_selectedBuildingId}";
+            _statusLabel.text = $"Р’С‹Р±СЂР°РЅРЅРѕ Р·РґР°РЅРёРµ {_selectedBuildingId}";
 
             SetBuildingColor(view.gameObject, Color.yellow);
 
@@ -169,8 +169,6 @@ namespace Scripts.Presentation.UI
 
       if (!result.IsSuccess)
         _statusLabel.text = result.Error;
-      else
-        _placeBuildingUseCase.Grid.Occupy(x, y);
     }
 
     private async UniTaskVoid MoveBuildingAsync(Guid id, int x, int y)
@@ -183,7 +181,7 @@ namespace Scripts.Presentation.UI
         return;
       }
 
-      _statusLabel.text = $"Здание переехало в ({x},{y})";
+      _statusLabel.text = $"В«РґР°РЅРёРµ РїРµСЂРµРµС…Р°Р»Рѕ РІ ({x},{y})";
 
       _buildingManager.MoveBuilding(id, x, y);
 
@@ -196,7 +194,7 @@ namespace Scripts.Presentation.UI
     {
       if (_selectedBuildingId == Guid.Empty)
       {
-        _statusLabel.text = "Сначала выберите здание";
+        _statusLabel.text = "РЎРЅР°С‡Р°Р»Р° РІС‹Р±РµСЂРёС‚Рµ Р·РґР°РЅРёРµ";
         return;
       }
 
@@ -210,7 +208,7 @@ namespace Scripts.Presentation.UI
 
       _buildingManager.RemoveBuilding(_selectedBuildingId);
 
-      _statusLabel.text = "Здание удалено";
+      _statusLabel.text = "Р—РґР°РЅРёРµ СѓРґР°Р»РµРЅРѕ";
 
       DestroyGhost();
     }
@@ -219,12 +217,12 @@ namespace Scripts.Presentation.UI
     {
       if (_selectedBuildingId == Guid.Empty)
       {
-        _statusLabel.text = "Сначала выберите здание";
+        _statusLabel.text = "РЎРЅР°С‡Р°Р»Р° РІС‹Р±РµСЂРёС‚Рµ Р·РґР°РЅРёРµ";
         return;
       }
 
       var result = await _upgradeBuildingUseCase.ExecuteAsync(_selectedBuildingId);
-      _statusLabel.text = result.IsSuccess ? "Здание улучшено" : result.Error;
+      _statusLabel.text = result.IsSuccess ? "Р—РґР°РЅРёРµ СѓР»СѓС‡С€РµРЅРѕ" : result.Error;
     }
 
     private void OnBuildingSelected(BuildingType type)
@@ -283,12 +281,12 @@ namespace Scripts.Presentation.UI
     {
       if (_selectedBuildingId == Guid.Empty)
       {
-        _statusLabel.text = "Сначала выберите здание";
+        _statusLabel.text = "РЎРЅР°С‡Р°Р»Р° РІС‹Р±РµСЂРёС‚Рµ Р·РґР°РЅРёРµ";
         return;
       }
 
       _isMoveMode = true;
-      _statusLabel.text = "Режим перемещения: нажмите на ячейку, чтобы разместить здание";
+      _statusLabel.text = "Р РµР¶РёРј РїРµСЂРµРјРµС‰РµРЅРёСЏ: РЅР°Р¶РјРёС‚Рµ РЅР° СЏС‡РµР№РєСѓ, С‡С‚РѕР±С‹ СЂР°Р·РјРµСЃС‚РёС‚СЊ Р·РґР°РЅРёРµ";
 
       var building = _buildingManager.GetBuildingById(_selectedBuildingId);
       if (building != null)

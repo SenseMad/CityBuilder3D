@@ -1,7 +1,8 @@
-﻿using Cysharp.Threading.Tasks;
-using Scripts.Domain.Models;
+using Cysharp.Threading.Tasks;
+using MessagePipe;
 using Scripts.Application.Interfaces;
 using Scripts.Application.MessageContracts.Events;
+using Scripts.Domain.Models;
 using System;
 using System.Threading;
 
@@ -11,13 +12,13 @@ namespace Scripts.Application.UseCases
   {
     private readonly IBuildingRepository _buildingRepository;
     private readonly Grid _grid;
-    private readonly IEventBus _eventBus;
+    private readonly IPublisher<BuildingRemovedEvent> _removedPublisher;
 
-    public RemoveBuildingUseCase(IBuildingRepository buildingRepository, Grid grid, IEventBus eventBus)
+    public RemoveBuildingUseCase(IBuildingRepository buildingRepository, Grid grid, IPublisher<BuildingRemovedEvent> removedPublisher)
     {
       _buildingRepository = buildingRepository;
       _grid = grid;
-      _eventBus = eventBus;
+      _removedPublisher = removedPublisher;
     }
 
     public async UniTask<Result> ExecuteAsync(Guid buildingId, CancellationToken cancellationToken = default)
@@ -32,7 +33,7 @@ namespace Scripts.Application.UseCases
 
       _grid.Vacate(building.X, building.Y);
 
-      _eventBus.Publish(new BuildingRemovedEvent(buildingId));
+      _removedPublisher.Publish(new BuildingRemovedEvent(buildingId));
 
       return await UniTask.FromResult(Result.Ok());
     }

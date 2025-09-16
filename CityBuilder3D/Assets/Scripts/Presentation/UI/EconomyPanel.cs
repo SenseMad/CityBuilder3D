@@ -33,7 +33,7 @@ namespace Scripts.Presentation.UI
 
     private void OnGoldChanged(long newGold)
     {
-      _goldLabel.text = $"Золото: {newGold} (+{_economyService.GoldPerSecond} sec)";
+      _goldLabel.text = $"Р—РѕР»РѕС‚Рѕ: {newGold} (+{_economyService.GoldPerSecond} СЃРµРє)";
     }
 
     private void OnDestroy()

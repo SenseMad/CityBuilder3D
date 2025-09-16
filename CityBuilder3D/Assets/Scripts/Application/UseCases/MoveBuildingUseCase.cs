@@ -1,7 +1,8 @@
 using Cysharp.Threading.Tasks;
-using Scripts.Domain.Models;
+using MessagePipe;
 using Scripts.Application.Interfaces;
 using Scripts.Application.MessageContracts.Events;
+using Scripts.Domain.Models;
 using System;
 using System.Threading;
 
@@ -11,25 +12,25 @@ namespace Scripts.Application.UseCases
   {
     private readonly IBuildingRepository _buildingRepository;
     private readonly Grid _grid;
-    private readonly IEventBus _eventBus;
+    private readonly IPublisher<BuildingMovedEvent> _movedPublisher;
 
-    public MoveBuildingUseCase(IBuildingRepository buildingRepository, Grid grid, IEventBus eventBus)
+    public MoveBuildingUseCase(IBuildingRepository buildingRepository, Grid grid, IPublisher<BuildingMovedEvent> movedPublisher)
     {
       _buildingRepository = buildingRepository;
       _grid = grid;
-      _eventBus = eventBus;
+      _movedPublisher = movedPublisher;
     }
 
     public async UniTask<Result> ExecuteAsync(Guid buildingId, int toX, int toY, CancellationToken cancellationToken = default)
     {
       var building = _buildingRepository.FindById(buildingId);
       if (building == null)
-        Result.Fail("Здание не найдено");
+        return Result.Fail("Р—РґР°РЅРёРµ РЅРµ РЅР°Р№РґРµРЅРѕ");
 
       if (!_grid.IsInside(toX, toY))
-        return Result.Fail("Целевая внешняя сетка");
+        return Result.Fail("Р¦РµР»РµРІР°СЏ РІРЅРµС€РЅСЏСЏ СЃРµС‚РєР°");
       if (!_grid.CanPlace(toX, toY))
-        return Result.Fail("Целевая ячейка занята");
+        return Result.Fail("Р¦РµР»РµРІР°СЏ СЏС‡РµР№РєР° Р·Р°РЅСЏС‚Р°");
 
       _grid.Vacate(building.X, building.Y);
       building.MoveTo(toX, toY);
@@ -37,7 +38,7 @@ namespace Scripts.Application.UseCases
 
       _buildingRepository.Update(building);
 
-      _eventBus.Publish(new BuildingMovedEvent(buildingId, toX, toY));
+      _movedPublisher.Publish(new BuildingMovedEvent(buildingId, toX, toY));
 
       return await UniTask.FromResult(Result.Ok());
     }

@@ -59,36 +59,36 @@ namespace Scripts.Presentation.UI
       _saveGameUse = saveGameUse;
       _loadGameUse = loadGameUse;
 
-      _savedSubscriber = savedSubscriber.Subscribe(_ => _statusLabel.text = "Игра сохранена!");
-      _loadedSubscriber = loadedSubscriber.Subscribe(_ => _statusLabel.text = "Игра загружена!");
+      _savedSubscriber = savedSubscriber.Subscribe(_ => _statusLabel.text = "РРіСЂР° СЃРѕС…СЂР°РЅРµРЅР°!");
+      _loadedSubscriber = loadedSubscriber.Subscribe(_ => _statusLabel.text = "РРіСЂР° Р·Р°РіСЂСѓР¶РµРЅР°!");
 
       _buildingManager = buildingManager;
     }
 
     private async void OnSaveClicked()
     {
-      _statusLabel.text = "Сохранение...";
+      _statusLabel.text = "РЎРѕС…СЂР°РЅРµРЅРёРµ...";
       var result = await _saveGameUse.ExecuteAsync();
       if (!result.IsSuccess)
-        _statusLabel.text = $"Сохранить не удалось: {result.Error}";
+        _statusLabel.text = $"РЎРѕС…СЂР°РЅРёС‚СЊ РЅРµ СѓРґР°Р»РѕСЃСЊ: {result.Error}";
     }
     
     private async void OnLoadClicked()
     {
-      _statusLabel.text = "Загрузка...";
+      _statusLabel.text = "Р—Р°РіСЂСѓР·РєР°...";
 
       _buildingManager.ClearAllBuildings();
 
       var result = await _loadGameUse.ExecuteAsync();
       if (!result.IsSuccess)
       {
-        _statusLabel.text = $"Сбой загрузки: {result.Error}";
+        _statusLabel.text = $"РЎР±РѕР№ Р·Р°РіСЂСѓР·РєРё: {result.Error}";
         return;
       }
 
       _buildingManager.SpawnAllBuildingsFromRepository();
 
-      _statusLabel.text = "Игра загружена!";
+      _statusLabel.text = "РРіСЂР° Р·Р°РіСЂСѓР¶РµРЅР°!";
     }
 
     private void StartAutoSave()
@@ -106,13 +106,13 @@ namespace Scripts.Presentation.UI
           await UniTask.Delay(TimeSpan.FromSeconds(_autoSaveInterval), cancellationToken: token);
           if (token.IsCancellationRequested) break;
 
-          _statusLabel.text = "Автоматическое сохранение...";
+          _statusLabel.text = "РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРµ СЃРѕС…СЂР°РЅРµРЅРёРµ...";
           var result = await _saveGameUse.ExecuteAsync(token);
 
           if (!result.IsSuccess)
-            _statusLabel.text = $"Не удалось выполнить автоматическое сохранение: {result.Error}";
+            _statusLabel.text = $"РќРµ СѓРґР°Р»РѕСЃСЊ РІС‹РїРѕР»РЅРёС‚СЊ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРµ СЃРѕС…СЂР°РЅРµРЅРёРµ: {result.Error}";
           else
-            _statusLabel.text = "Автоматическое сохранение!";
+            _statusLabel.text = "РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРѕРµ СЃРѕС…СЂР°РЅРµРЅРёРµ!";
         }
       }
       catch (OperationCanceledException) { }

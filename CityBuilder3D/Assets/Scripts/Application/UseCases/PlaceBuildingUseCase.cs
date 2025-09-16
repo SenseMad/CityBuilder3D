@@ -35,16 +35,16 @@ namespace Scripts.Application.UseCases
     public async UniTask<Result<Guid>> ExecuteAsync(PlaceBuildingCommand command, CancellationToken cancellationToken = default)
     {
       if (!Grid.IsInside(command.X, command.Y))
-        return Result<Guid>.Fail("Позиция за сеткой");
+        return Result<Guid>.Fail("РџРѕР·РёС†РёСЏ Р·Р° СЃРµС‚РєРѕР№");
 
       if (!Grid.CanPlace(command.X, command.Y))
-        return Result<Guid>.Fail("Ячейка занята");
+        return Result<Guid>.Fail("РЇС‡РµР№РєР° Р·Р°РЅСЏС‚Р°");
 
       var cost = command.Type.BaseCost;
       if (!_economyService.TrySpend(cost))
       {
         _notEnoughGoldPublisher.Publish(new NotEnoughGoldEvent(command.Type.Kind.ToString(), cost, _economyService.GetGold()));
-        return Result<Guid>.Fail($"Не хватает золота чтобы установить. Нужно {cost} Золота");
+        return Result<Guid>.Fail($"РќРµ С…РІР°С‚Р°РµС‚ Р·РѕР»РѕС‚Р° С‡С‚РѕР±С‹ СѓСЃС‚Р°РЅРѕРІРёС‚СЊ. РќСѓР¶РЅРѕ {cost} Р—РѕР»РѕС‚Р°");
       }
 
       var id = Guid.NewGuid();

@@ -35,7 +35,7 @@ namespace Scripts.Application.Services
       }
       catch (System.Exception ex)
       {
-        Debug.LogError($"Сохранить не удалось: {ex.Message}");
+        Debug.LogError($"РЎРѕС…СЂР°РЅРёС‚СЊ РЅРµ СѓРґР°Р»РѕСЃСЊ: {ex.Message}");
         throw;
       }
     }
@@ -46,7 +46,7 @@ namespace Scripts.Application.Services
       {
         if (!File.Exists(_savePath))
         {
-          Debug.LogWarning("Файл сохранения не найден");
+          Debug.LogWarning("Р¤Р°Р№Р» СЃРѕС…СЂР°РЅРµРЅРёСЏ РЅРµ РЅР°Р№РґРµРЅ");
           return null;
         }
 
@@ -55,7 +55,7 @@ namespace Scripts.Application.Services
 
         if (saveDataDto == null)
         {
-          Debug.LogWarning("Не удалось разобрать сохраненный файл");
+          Debug.LogWarning("РќРµ СѓРґР°Р»РѕСЃСЊ СЂР°Р·РѕР±СЂР°С‚СЊ СЃРѕС…СЂР°РЅРµРЅРЅС‹Р№ С„Р°Р№Р»");
           return null;
         }
 
@@ -65,7 +65,7 @@ namespace Scripts.Application.Services
       }
       catch (System.Exception ex)
       {
-        Debug.LogError($"Сбой загрузки: {ex.Message}");
+        Debug.LogError($"РЎР±РѕР№ Р·Р°РіСЂСѓР·РєРё: {ex.Message}");
         return null;
       }
     }

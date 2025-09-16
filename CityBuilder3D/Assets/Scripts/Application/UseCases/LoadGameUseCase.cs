@@ -1,7 +1,8 @@
-﻿using Cysharp.Threading.Tasks;
-using Scripts.Domain.Models;
+using Cysharp.Threading.Tasks;
+using MessagePipe;
 using Scripts.Application.Interfaces;
 using Scripts.Application.MessageContracts.Events;
+using Scripts.Domain.Models;
 using System;
 using System.Threading;
 
@@ -14,16 +15,24 @@ namespace Scripts.Application.UseCases
     private readonly ISaveLoadService _saveLoadService;
     private readonly Grid _grid;
     private readonly Func<string, BuildingType?> _buildingTypeResolver;
-    private readonly IEventBus _eventBus;
+    private readonly IPublisher<BuildingPlacedEvent> _buildingPlacedEvent;
 
-    public LoadGameUseCase(IBuildingRepository buildingRepository, IEconomyService economyService, ISaveLoadService saveLoadService, Grid grid, Func<string, BuildingType?> buildingTypeResolver, IEventBus eventBus)
+
+    public LoadGameUseCase(
+      IBuildingRepository buildingRepository, 
+      IEconomyService economyService, 
+      ISaveLoadService saveLoadService, 
+      Grid grid, 
+      Func<string, BuildingType?> buildingTypeResolver,
+      IPublisher<BuildingPlacedEvent> buildingPlacedEvent
+      )
     {
       _buildingRepository = buildingRepository;
       _economyService = economyService;
       _saveLoadService = saveLoadService;
       _grid = grid;
       _buildingTypeResolver = buildingTypeResolver;
-      _eventBus = eventBus;
+      _buildingPlacedEvent = buildingPlacedEvent;
     }
 
     public async UniTask<Result> ExecuteAsync(CancellationToken cancellationToken = default)
@@ -48,15 +57,18 @@ namespace Scripts.Application.UseCases
           if (type == null)
             continue;
 
-          var newBuilding = new Building(building.Id != Guid.Empty ? building.Id : Guid.NewGuid(), type, building.X, building.Y, building.Level);
+          Guid parsedId;
+          if (!Guid.TryParse(building.Id, out parsedId))
+            parsedId = Guid.NewGuid();
+
+          var newBuilding = new Building(parsedId, type, building.X, building.Y, building.Level);
 
           _buildingRepository.Add(newBuilding);
           _grid.Occupy(building.X, building.Y);
 
-          _eventBus.Publish(new BuildingPlacedEvent(newBuilding.Id, type.Kind.ToString(), newBuilding.X, newBuilding.Y, newBuilding.Level));
+          _buildingPlacedEvent.Publish(new BuildingPlacedEvent(newBuilding.Id, type.Kind.ToString(), newBuilding.X, newBuilding.Y, newBuilding.Level));
         }
 
-        _eventBus.Publish(new GameLoadedEvent());
         return Result.Ok();
       }
       catch (Exception ex)

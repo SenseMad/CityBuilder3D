@@ -12,7 +12,7 @@ namespace Scripts.Application.DTO
     [Serializable]
     public class BuildingDto
     {
-      public Guid Id;
+      public string Id;
       public string Kind = "";
       public int X;
       public int Y;
