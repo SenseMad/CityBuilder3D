@@ -181,7 +181,7 @@ namespace Scripts.Presentation.UI
         return;
       }
 
-      _statusLabel.text = $"«дание переехало в ({x},{y})";
+      _statusLabel.text = $"Здание переехало в ({x},{y})";
 
       _buildingManager.MoveBuilding(id, x, y);
 

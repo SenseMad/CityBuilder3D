@@ -86,8 +86,6 @@ namespace Scripts.Presentation.UI
         return;
       }
 
-      _buildingManager.SpawnAllBuildingsFromRepository();
-
       _statusLabel.text = "Игра загружена!";
     }
 
