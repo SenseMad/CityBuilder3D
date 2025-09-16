@@ -57,8 +57,7 @@ namespace Scripts.Application.UseCases
           if (type == null)
             continue;
 
-          Guid parsedId;
-          if (!Guid.TryParse(building.Id, out parsedId))
+          if (!Guid.TryParse(building.Id, out Guid parsedId))
             parsedId = Guid.NewGuid();
 
           var newBuilding = new Building(parsedId, type, building.X, building.Y, building.Level);
