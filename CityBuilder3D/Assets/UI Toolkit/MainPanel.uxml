@@ -1,0 +1,23 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Root" style="flex-grow: 1; flex-direction: row-reverse; justify-content: space-between; align-items: auto; width: auto; min-width: auto; visibility: flex-start; overflow: hidden; align-self: stretch;">
+        <ui:GroupBox name="SavePanel">
+            <ui:Label name="SaveStatusLabel" double-click-selects-word="true" style="-unity-text-align: flex-start; -unity-font-style: normal; white-space: nowrap; text-overflow: clip; font-size: 24px;" />
+            <ui:GroupBox style="align-self: flex-end; flex-direction: row;">
+                <ui:Button text="Save" name="SaveButton" />
+                <ui:Button text="Load" name="LoadButton" />
+            </ui:GroupBox>
+        </ui:GroupBox>
+        <ui:GroupBox name="BuildingPanel" style="align-items: flex-start; flex-direction: column; align-self: flex-end; justify-content: flex-start;">
+            <ui:Label name="BuildingStatusLabel" style="font-size: 24px;" />
+            <ui:GroupBox name="BuildingsButtons" style="align-self: flex-start; flex-direction: row;" />
+            <ui:GroupBox name="GroupBox" style="align-self: center; flex-direction: row; align-items: flex-end; justify-content: space-around; bottom: auto; right: auto; position: absolute; left: 860px; top: 24px;">
+                <ui:Button text="Move" name="MoveButton" style="visibility: hidden;" />
+                <ui:Button text="Remove" name="RemoveButton" style="visibility: hidden;" />
+                <ui:Button text="Upgrade" name="UpgradeButton" style="visibility: hidden;" />
+            </ui:GroupBox>
+        </ui:GroupBox>
+        <ui:GroupBox name="GoldPanel" style="top: 0; right: 0; left: 0; position: absolute;">
+            <ui:Label name="GoldLabel" style="-unity-text-align: middle-left; -unity-font-style: bold; font-size: 40px;" />
+        </ui:GroupBox>
+    </ui:VisualElement>
+</ui:UXML>
